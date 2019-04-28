@@ -1,0 +1,142 @@
+version: "3"
+
+services:
+    nginx:
+        container_name: nginx
+        image: nginx
+        ports:
+            - "80:80"
+        volumes:
+            - ./volumes/nginx/conf/nginx:/etc/nginx
+            - ./volumes/nginx/html:/usr/share/nginx/html
+        networks:
+            - devops
+
+    tomcat_test:
+        container_name: tomcat-test
+        image: tomcat:9.0.10-jre8
+        ports:
+            - "7070:8080"
+        volumes:
+            - ./volumes/tomcat-test/conf:/usr/local/tomcat/conf
+            - ./volumes/tomcat-test/webapps/:/usr/local/tomcat/webapps/
+        networks:
+            - devops
+            
+    tomcat_stage:
+        container_name: tomcat-stage
+        image: tomcat:9.0.10-jre8
+        ports:
+            - "7080:8080"
+        volumes:
+            - ./volumes/tomcat-stage/conf:/usr/local/tomcat/conf
+            - ./volumes/tomcat-stage/webapps/:/usr/local/tomcat/webapps/
+        networks:
+            - devops
+
+    tomcat_prod:
+        container_name: tomcat-prod
+        image: tomcat:9.0.10-jre8
+        ports:
+            - "7090:8080"
+        volumes:
+            - ./volumes/tomcat-prod/conf:/usr/local/tomcat/conf
+            - ./volumes/tomcat-prod/webapps/:/usr/local/tomcat/webapps/
+        networks:
+            - devops
+
+    jenkins:
+        container_name: jenkins
+        image: jenkins/jenkins
+        ports:
+            - "8080:8080"
+            - "50000:50000"
+        environment:
+            - "JAVA_OPTS: -Duser.timezone=Europe/Amsterdam"
+            - "JENKINS_OPTS='--prefix=/jenkins'"
+        volumes:
+            - ./volumes/jenkins/jenkins_home:/var/jenkins_home
+        networks:
+            - devops
+
+    sonarqube:
+        container_name: sonarqube
+        image: sonarqube
+        ports:
+            - "7000:9000"
+        environment:
+            - "sonar.web.context=/sonarqube"
+        volumes:
+            - ./volumes/sonarqube/conf/conf:/opt/sonarqube/conf
+            - ./volumes/sonarqube/data:/opt/sonarqube/data
+            - ./volumes/sonarqube/extensions:/opt/sonarqube/extensions
+            - ./volumes/sonarqube/bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+        networks:
+            - devops
+
+    nexus:
+        container_name: nexus
+        image: sonatype/nexus3
+        ports:
+            - "8081:8081"
+        ulimits:
+            nofile:
+                soft: 98304
+                hard: 98304
+        environment:
+            - "NEXUS_CONTEXT=nexus"
+        volumes:
+            - ./volumes/nexus/data:/nexus-data
+        networks:
+            - devops
+
+    gitlab:
+        container_name: gitlab
+        image: gitlab/gitlab-ce:latest
+        ports:
+            - "8085:80"
+            - "7086:443"
+            - "7087:22"
+        hostname: "gitlab:80"
+        environment:
+            GITLAB_OMNIBUS_CONFIG:
+                external_url 'http://gitlab:80/gitlab'
+
+        volumes:
+            - ./volumes/gitlab/config:/etc/gitlab
+            - ./volumes/gitlab/logs:/var/log/gitlab
+            - ./volumes/gitlab/data:/var/opt/gitlab
+        networks:
+            - devops
+
+    influxdb:
+        container_name: influxdb
+        image: influxdb
+        ports:
+            - "8086:8086"
+        volumes:
+            - ./volumes/influxdb/data:/var/lib/influxdb
+        environment:
+            - "INFLUX_DB=influx"
+            - "INFLUX_USER=admin"
+            - "INFLUX_PASSWORD=admin"
+        networks:
+            - devops
+
+    grafana:
+        container_name: grafana
+        image: grafana/grafana
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./volumes/grafana/data:/var/lib/grafana
+        environment:
+            - "GF_SECURITY_ADMIN_USER=admin"
+            - "GF_SECURITY_ADMIN_PASSWORD=admin"
+            - "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel,grafana-piechart-panel"
+            - "GF_SERVER_ROOT_URL=http://grafana/grafana/"
+        networks:
+            - devops           
+            
+networks:
+    devops:

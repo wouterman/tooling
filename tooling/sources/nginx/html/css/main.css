@@ -1,0 +1,11 @@
+img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.bottom-left {
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+}
