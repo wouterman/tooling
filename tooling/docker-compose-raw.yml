@@ -99,6 +99,37 @@ services:
             - "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel,grafana-piechart-panel"
         networks:
             - devops
+            
+    elasticsearch:
+        container_name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.0.0
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        environment:
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - "discovery.type=single-node"
+        networks:
+            - devops
+            
+    logstash:
+        container_name: logstash
+        image: docker.elastic.co/logstash/logstash:7.0.0
+        ports:
+            - "5000:5000"
+            - "9600:9600"
+        environment:
+            - "LS_JAVA_OPTS=-Xmx256m -Xms256m"
+        networks:
+            - devops
+
+    kibana:
+        container_name: kibana
+        image: docker.elastic.co/kibana/kibana-oss:7.0.0
+        ports:
+            - "5601:5601"
+        networks:
+            - devops
 
 networks:
     devops:

@@ -136,7 +136,72 @@ services:
             - "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel,grafana-piechart-panel"
             - "GF_SERVER_ROOT_URL=http://grafana/grafana/"
         networks:
-            - devops           
+            - devops
+            
+    elasticsearch:
+        container_name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.0.0
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        volumes:
+            - ./volumes/elasticsearch/data:/usr/share/elasticsearch/data
+        environment:
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - "discovery.type=single-node"
+        networks:
+            - devops
+            
+    logstash:
+        container_name: logstash
+        image: docker.elastic.co/logstash/logstash:7.0.0
+        ports:
+            - "5000:5000"
+            - "9600:9600"
+        volumes:
+            - ./volumes/logstash/config:/usr/share/logstash/config
+            - ./volumes/logstash/pipeline:/usr/share/logstash/pipeline
+        environment:
+            - "LS_JAVA_OPTS=-Xmx256m -Xms256m"
+        networks:
+            - devops
+
+    kibana:
+        container_name: kibana
+        image: docker.elastic.co/kibana/kibana-oss:7.0.0
+        ports:
+            - "5601:5601"
+        volumes:
+            - ./volumes/kibana/config:/usr/share/kibana/config
+        networks:
+            - devops
+            
+    filebeat:
+        container_name: filebeat
+        image: docker.elastic.co/beats/filebeat-oss:7.0.0
+        privileged: true
+        command: filebeat -e -strict.perms=false
+        user: root
+        volumes:
+            - /var/lib/docker/containers:/var/lib/docker/containers
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./volumes/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+        environment:
+            - "output.elasticsearch.hosts=[\"elasticsearch:9200\"]"
+        networks:
+            - devops
+
+    logspout:
+        container_name: logspout
+        build: ./sources/logspout
+        image: logspout
+        restart: always
+        environment:
+            - "ROUTE_URIS=logstash://logstash:5000"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - devops            
             
 networks:
     devops:

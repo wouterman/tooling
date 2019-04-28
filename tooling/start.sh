@@ -47,6 +47,11 @@ mkdir -p ./volumes/tomcat-test/conf
 mkdir -p ./volumes/tomcat-test/webapps
 mkdir -p ./volumes/influxdb/data
 mkdir -p ./volumes/grafana/data
+mkdir -p ./volumes/elasticsearch/data
+mkdir -p ./volumes/logstash/config
+mkdir -p ./volumes/logstash/pipeline
+mkdir -p ./volumes/kibana/config
+mkdir -p ./volumes/filebeat/
 
 echo "Copying nginx"
 docker cp nginx:/etc/nginx ./volumes/nginx/conf
@@ -101,6 +106,28 @@ docker cp influxdb:/var/lib/influxdb ./volumes/influxdb/data
 
 echo "Copying Grafana"
 docker cp grafana:/var/lib/grafana ./volumes/grafana/data
+
+echo "Copying Elasticsearch"
+docker cp elasticsearch:/usr/share/elasticsearch/data ./volumes/elasticsearch
+
+echo "Copying Logstash"
+docker cp logstash:/usr/share/logstash/config ./volumes/logstash
+docker cp logstash:/usr/share/logstash/pipeline ./volumes/logstash
+
+echo "Replacing logstash.conf"
+cp ./sources/logstash/logstash.conf ./volumes/logstash/pipeline/logstash.conf
+
+echo "Copying logstash.yml"
+cp ./sources/logstash/logstash.yml ./volumes/logstash/config
+
+echo "Copying Kibana"
+docker cp kibana:/usr/share/kibana/config ./volumes/kibana
+
+echo "Copying kibana.yml"
+cp ./sources/kibana/kibana.yml ./volumes/kibana/config/
+
+echo "Copying filebeat.yml"
+cp ./sources/filebeat/filebeat.yml ./volumes/filebeat/
 
 echo "Changing volume permissions"
 chown -R root:root volumes

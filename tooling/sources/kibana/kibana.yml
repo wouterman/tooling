@@ -1,0 +1,6 @@
+---
+## Default Kibana configuration from kibana-docker.
+server.basePath: "/kibana"
+server.name: kibana
+server.host: "0"
+elasticsearch.hosts: [ 'http://elasticsearch:9200' ]
