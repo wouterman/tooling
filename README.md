@@ -14,17 +14,17 @@ Additional libraries for Ubuntu:
 
 There are two 'versions' in this repo:
 
-* start_hosted.bat/start_hosted.sh, this version uses hosted volumes 
-* start_mounted.sh, this will create and use mounted volumes.
+* `start_hosted.bat` or `start_hosted.sh`, this version uses hosted volumes 
+* `start_mounted.sh`, this will create and use mounted volumes.
 
 Hosted volumes are volumes created and managed by Docker. Mounted volumes are directories on the local filesystem that are mounted in the container.
 
-start_mounted.sh will create a directory called 'volumes' which will contain a separate directory for each container.
+`start_mounted.sh` will create a directory called 'volumes' which will contain a separate directory for each container.
 These directories will be mounted inside of the container and will hold all the container's data.
 
 The `start_hosted` version will make use of named volumes instead.
 
-**This is the recommended approach! To make mounted volumes work I had to take some liberties with security. So is the entire volumes directory and all of its sub-directories are read- and writable by *any* user.** 
+**`start_hosted` is the recommended approach! To make mounted volumes work I had to take some liberties with security. So is the entire volumes directory and all of its sub-directories are read- and writable by *any* user.** 
 
 The following containers will be set up:
 * [Nginx](https://hub.docker.com/_/nginx)
