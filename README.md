@@ -1,4 +1,4 @@
-# tooling
+# Tooling Dashboard
 
 ## Summary
 This repo holds several docker-compose files that set up a basic Java oriented CICD environment in Docker, including a configured reverse proxy for easy access.
@@ -25,7 +25,7 @@ The 'start_hosted' version will make use of named volumes instead.
 **This is the recommended approach! To make mounted volumes work I had to take some liberties with security. So is the entire volumes directory and all of its sub-directories read- and writable by *any* user.** 
 
 The following containers will be set up:
-* Nginx
+* Nginx [Nginx](https://hub.docker.com/_/nginx)
 * Jenkins
 * Sonarqube
 * Nexus
