@@ -25,14 +25,14 @@ The 'start_hosted' version will make use of named volumes instead.
 **This is the recommended approach! To make mounted volumes work I had to take some liberties with security. So is the entire volumes directory and all of its sub-directories read- and writable by *any* user.** 
 
 The following containers will be set up:
-* Nginx [Nginx](https://hub.docker.com/_/nginx)
-* Jenkins
-* Sonarqube
-* Nexus
-* Gitlab
-* InfluxDB
-* Grafana
-* Three tomcat servers ('test', 'staging' and 'prod' to simulate different environments)
+* [Nginx](https://hub.docker.com/_/nginx)
+* [Jenkins](https://github.com/jenkinsci/docker/blob/master/README.md)
+* [Sonarqube](https://hub.docker.com/_/sonarqube)
+* [Nexus](https://hub.docker.com/r/sonatype/nexus3/)
+* [Gitlab](https://docs.gitlab.com/omnibus/docker/)
+* [InfluxDB](https://hub.docker.com/_/influxdb)
+* [Grafana](https://hub.docker.com/r/grafana/grafana/)
+* Three [Tomcat](https://hub.docker.com/_/tomcat) servers ('test', 'staging' and 'prod' to simulate different environments)
 
 **Make sure you have enough resources to run this! (8gb RAM atleast)**
 
@@ -44,7 +44,6 @@ Execute *./start_mounted.sh* or *./start_hosted.sh as root*.
 ### Windows
 Clone the repository to your local machine and run the following command:
 *start_hosted.bat*
-
 
 Once everything is started up navigate to localhost to find the following dashboard available:
 ![Dashboard](/dashboard.jpg)
