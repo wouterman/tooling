@@ -2,13 +2,14 @@
 
 ## Summary
 This repo holds several docker-compose files that set up a basic Java oriented CICD environment in Docker, including a configured reverse proxy for easy access.
+
 The containers will be persistent.
 
 ## Requirements
-Latest Docker CE version for your platform https://docs.docker.com/install/
+[Latest Docker CE version for your platform](https://docs.docker.com/install/)
 
 Additional libraries for Ubuntu:
-* JQ https://stedolan.github.io/jq/
+* [JQ](https://stedolan.github.io/jq/)
 
 
 There are two 'versions' in this repo:
@@ -21,8 +22,9 @@ Hosted volumes are volumes created and managed by Docker. Mounted volumes are di
 start_mounted.sh will create a directory called 'volumes' which will contain a separate directory for each container.
 These directories will be mounted inside of the container and will hold all the container's data.
 
-The 'start_hosted' version will make use of named volumes instead.
-**This is the recommended approach! To make mounted volumes work I had to take some liberties with security. So is the entire volumes directory and all of its sub-directories read- and writable by *any* user.** 
+The `start_hosted` version will make use of named volumes instead.
+
+**This is the recommended approach! To make mounted volumes work I had to take some liberties with security. So is the entire volumes directory and all of its sub-directories are read- and writable by *any* user.** 
 
 The following containers will be set up:
 * [Nginx](https://hub.docker.com/_/nginx)
@@ -39,14 +41,28 @@ The following containers will be set up:
 ## Installation
 ### Ubuntu
 Clone the repository to your local machine and make sure the shell-script has executable permissions.
-Execute *./start_mounted.sh* or *./start_hosted.sh as root*.
+Execute `./start_mounted.sh` or `./start_hosted.sh` as root.
 
 ### Windows
 Clone the repository to your local machine and run the following command:
-*start_hosted.bat*
+`start_hosted.bat`
 
 Once everything is started up navigate to localhost to find the following dashboard available:
 ![Dashboard](/dashboard.jpg)
+
+## Jenkins
+In `sources\jenkins` there are two files:
+* exzecutors.groovy
+* plugins.txt
+
+In `executors.groovy` you can set the amount of executors Jenkins should use with the following line:
+
+`Jenkins.instance.setNumExecutors(5)`
+
+By default it will start with `5` executors but feel free to change this number to whatever you prefer.
+
+In `plugins.txt` you can pre-install any desired plugins. See the [Jenkins Documentation](https://github.com/jenkinsci/docker#preinstalling-plugins) for more information
+
 
 
 
