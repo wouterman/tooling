@@ -52,7 +52,7 @@ Once everything is started up navigate to localhost to find the following dashbo
 
 ## Jenkins
 In `sources\jenkins` there are two files:
-* exzecutors.groovy
+* executors.groovy
 * plugins.txt
 
 In `executors.groovy` you can set the amount of executors Jenkins should use with the following line:
